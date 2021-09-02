@@ -103,16 +103,9 @@ const colors = [
   "purple"
 ]
 
-const iconsContainer = document.getElementById('icon');
+// arrow function
 
-// console.log
-
-const coloredArray = colorIcon(icon, colors);
-print (coloredArray, iconsContainer);
-
-// funzioni
-
-function print(array, container){
+const print = (array, container) =>{
   container.innerHTML = " ";
   array.forEach((element) => {
     // console.log(element.name);
@@ -122,32 +115,68 @@ function print(array, container){
       <i class="${family} ${prefix + name}" style="color: ${color}"></i>
       <div class="undertitle">${name.toUpperCase()}</div>
     </div>
-    `
+    `;
   });
 }
 
-function colorIcon(array, colors){
+const colorIcon = (array, colors) => {
   const types = getTypes(array);
   // console.log(types);
 
   const coloredArray = array.map((element) => {
     const indexType = types.indexOf(element.type);
-    console.log(indexType);
+    //console.log(indexType);
 
     element.color = colors[indexType];
     return element;
-  })
+  });
   return coloredArray;
 }
 
-function getTypes(array){
+const getTypes = (array) =>{
   const types = [];
 
   array.forEach((element) => {
-    console.log(element.type);
+    //console.log(element.type);
     if(!types.includes(element.type)){ //il ! è come se scrivi == false
       types.push(element.type);
     }
   });
   return types;
+}
+
+const printOptions = (array, select) =>{
+  array.forEach((element) => {
+    select.innerHTML += `<option value="${element}">${element}</option>`;
+  });
+}
+
+const filterValues = (array, type)=>{
+  const filteredIcons = array.filter((element) =>{
+    if(element.type === type){
+      return true;
+    }
+    return false;
+  });
+
+  if(type === ""){
+    return array;
+  }
+  return filteredIcons;
+}
+//fine arrow function
+
+const iconsContainer = document.getElementById('icon');
+const coloredArray = colorIcon(icon, colors);
+print (coloredArray, iconsContainer);
+
+const types = getTypes(coloredArray);
+const select = document.getElementById("type");
+printOptions(types, select);
+
+select.onchange = function(element){
+  const filtered = filterValues(icon, element.target.value);
+  //console.log(filtered);
+
+  print(filtered, iconsContainer);
 }
